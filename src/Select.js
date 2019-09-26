@@ -12,12 +12,17 @@ handleChange =(event, book)=> {
 let val=event.target.value;
 
   book.shelf=val
-  this.value=val
-  console.log( 'value', this.value);
+  console.log('handler', book)
+  //this.value=val
+ // console.log( 'value', this.value);
+ /* this.setState({
+    shelf:val
+  })*/
 
   this.mybooksPsngr(book, val);
 
 }
+
 deleteBook(book, event){
   this.props.deleteBook(book, event)
 
@@ -28,13 +33,13 @@ deleteBook(book, event){
   render(){
 
 
-  const { book }=this.props
+  const { book, shelf }=this.props
 
 
   return(
 
-       <select value={book.shelf} defaultValue="none"  onChange={(event)=>{
-                            this.handleChange(event, book)}}>
+       <select defaultValue={ book.shelf || 'none'}  onChange={(event)=>{
+                            this.handleChange(event, book, shelf)}}>
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading"
                                >Currently Reading</option>

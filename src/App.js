@@ -1,7 +1,5 @@
 import React from 'react'
-import {
- Route
-} from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import SearchScreen from './SearchScreen'
 import Shelves from './Shelves'
 import * as BooksAPI from './BooksAPI'
@@ -13,34 +11,40 @@ class BooksApp extends React.Component {
   this.state = {
    selectedBooks: [],
    books: [],
+   shelf:''
   }
 
  }
 
 
 
- updateMyAPI(newSelect, shelf) {
-
-  BooksAPI.update(newSelect, shelf).then(() => {
+ updateMyAPI(newSelect, myshelf) {
+  BooksAPI.update(newSelect, myshelf).then(() => {
    BooksAPI.getAll().then((selectedBooks) => {
-    this.setState({
-     selectedBooks: selectedBooks
+    newSelect.shelf=myshelf
+    this.setState ({
+     selectedBooks: selectedBooks,
     })
-   })
+   
+    })
+
+
+
   })
  }
 
 
- booksPsngr = (newSelect, shelf) => {
+ booksPsngr = (newSelect, myshelf) => {
   console.log('latest book value', newSelect)
   if (!this.state.selectedBooks.includes(newSelect)) {
    this.setState((currentState) => ({
     selectedBooks: currentState.selectedBooks.concat(newSelect)
    }))
 
+
   }
 
-  this.updateMyAPI(newSelect, shelf)
+  this.updateMyAPI(newSelect, myshelf)
 
  }
 
@@ -64,23 +68,19 @@ class BooksApp extends React.Component {
   })
  }
 
- render() {
 
+ render() {
+console.log(this.state.selectedBooks)
   return ( <
    div className = "app" >
    <
    Route exact path = '/'
-   render = {
-    () => ( <
-     Shelves books = {
+   render = {() => ( <Shelves books = {
       this.state.selectedBooks
      }
-     deleteBook = {
-      this.deleteBook
-     }
-     booksPsngr = {
-      this.booksPsngr
-     }
+     deleteBook = { this.deleteBook}
+     booksPsngr = {this.booksPsngr}
+     updateMyAPI={this.updateMyAPI}
      />
     )
    }
@@ -102,6 +102,7 @@ class BooksApp extends React.Component {
      booksPsngr = {
       this.booksPsngr
      }
+
      />
     )
    }
